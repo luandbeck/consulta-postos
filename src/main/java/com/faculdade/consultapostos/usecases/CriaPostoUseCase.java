@@ -27,6 +27,8 @@ public class CriaPostoUseCase {
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
                 .cep(dto.getCep())
+                .latitude(coordenadas.getLat())
+                .longitude(coordenadas.getLon())
                 .build();
 
         this.repository.save(posto);

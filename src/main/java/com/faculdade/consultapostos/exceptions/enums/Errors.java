@@ -6,14 +6,10 @@ import java.util.ResourceBundle;
 public enum Errors {
     ATM001,
     ATM002,
-    ATM003,
-    ATM004,
-    ATM005,
-    ATM006,
-    ATM007;
+    ATM003;
 
     public String getMessage(final Locale messageLocale) {
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages/exceptions", messageLocale);
-        return resourceBundle.getString(name() + ".message");
+        return resourceBundle.getString(this.name() + ".message");
     }
 }

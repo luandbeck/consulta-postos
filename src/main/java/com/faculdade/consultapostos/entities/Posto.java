@@ -38,6 +38,9 @@ public class Posto {
     @Column(name = "cep")
     private String cep;
 
-    //@Column(name = "coordenadas")
-    //private String coordenadas;
+    @Column(name = "latitude")
+    private String latitude;
+
+    @Column(name = "longitude")
+    private String longitude;
 }

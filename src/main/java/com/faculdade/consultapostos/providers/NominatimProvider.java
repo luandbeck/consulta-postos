@@ -1,5 +1,6 @@
 package com.faculdade.consultapostos.providers;
 
+import com.faculdade.consultapostos.exceptions.EnderecoNaoEncontradoException;
 import com.faculdade.consultapostos.providers.dtos.NominatimResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ public class NominatimProvider {
 
         final List<NominatimResponse> response = nominatimClient.getCoordenadas(enderecoCompleto, 0, "br", "json", 1);
 
-        System.out.println("bla");
+        if (response.size() != 1) {
+            throw new EnderecoNaoEncontradoException();
+        }
 
         return response.get(0);
     }
