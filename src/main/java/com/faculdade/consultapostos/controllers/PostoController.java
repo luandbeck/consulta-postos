@@ -1,7 +1,6 @@
 package com.faculdade.consultapostos.controllers;
 
 import com.faculdade.consultapostos.dtos.CriaPostoDTO;
-import com.faculdade.consultapostos.dtos.RegistraAvaliacaoDTO;
 import com.faculdade.consultapostos.entities.Posto;
 import com.faculdade.consultapostos.repositories.PostoRepository;
 import com.faculdade.consultapostos.usecases.CriaPostoUseCase;
@@ -35,12 +34,12 @@ public class PostoController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping
-    public ResponseEntity<Void> registrarAvaliacao(@PathVariable final Long postoId,
-                                                   @RequestBody final RegistraAvaliacaoDTO dto) {
-
-        this.criaPostoUseCase.execute(dto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> registrarAvaliacao(@PathVariable final Long postoId,
+//                                                   @RequestBody final RegistraAvaliacaoDTO dto) {
+//
+//        this.criaPostoUseCase.execute(dto);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 }

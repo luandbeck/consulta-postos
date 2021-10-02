@@ -7,26 +7,11 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class CriaPostoDTO {
+public class RegistraAvaliacaoDTO {
 
     @NotBlank
-    private String nome;
+    private Long postoId;
 
     @NotBlank
-    private String endereco;
-
-    @NotBlank
-    private Long numeroEndereco;
-
-    @NotBlank
-    private String bairro;
-
-    @NotBlank
-    private String cidade;
-
-    @NotBlank
-    private String estado;
-
-    @NotBlank
-    private String cep;
+    private Integer nota;
 }
