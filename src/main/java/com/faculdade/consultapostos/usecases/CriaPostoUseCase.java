@@ -32,6 +32,5 @@ public class CriaPostoUseCase {
                 .build();
 
         this.repository.save(posto);
-
     }
 }
