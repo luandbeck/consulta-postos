@@ -6,7 +6,6 @@ import com.faculdade.consultapostos.exceptions.enums.Errors;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +18,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -117,29 +108,29 @@ public class ControllerExceptionHandler extends BaseExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<StandardError> constraintViolationException(final ConstraintViolationException ex,
-                                                                      final HttpServletRequest request) {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages/messages", request.getLocale());
-        final Map<String, List<String>> fields = new HashMap<>();
-        ex.getConstraintViolations().forEach(constraint -> {
-            final var constraintImpl = (ConstraintViolationImpl) constraint;
-            final String messageValidCharacters = constraintImpl.getMessage().replace("{", "").replace("}", "");
-            final List<String> list =
-                    Arrays.asList(new String(resourceBundle.getString(messageValidCharacters).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-            fields.put("header", list);
-        });
-
-        final StandardError error = StandardError.builder()
-                .error(this.convertToDefaultErrorData(fields, request.getLocale()))
-                .printStack(Boolean.FALSE)
-                .path(request.getRequestURI())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .timestamp(new Timestamp(System.currentTimeMillis()))
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<StandardError> constraintViolationException(final ConstraintViolationException ex,
+//                                                                      final HttpServletRequest request) {
+//        final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages/messages", request.getLocale());
+//        final Map<String, List<String>> fields = new HashMap<>();
+//        ex.getConstraintViolations().forEach(constraint -> {
+//            final var constraintImpl = (ConstraintViolationImpl) constraint;
+//            final String messageValidCharacters = constraintImpl.getMessage().replace("{", "").replace("}", "");
+//            final List<String> list =
+//                    Arrays.asList(new String(resourceBundle.getString(messageValidCharacters).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+//            fields.put("header", list);
+//        });
+//
+//        final StandardError error = StandardError.builder()
+//                .error(this.convertToDefaultErrorData(fields, request.getLocale()))
+//                .printStack(Boolean.FALSE)
+//                .path(request.getRequestURI())
+//                .status(HttpStatus.BAD_REQUEST.value())
+//                .timestamp(new Timestamp(System.currentTimeMillis()))
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+//    }
 
     private DefaultErrorResponse convertToDefaultErrorData(final List<FieldError> errorValidationList,
                                                            final Locale locale) {

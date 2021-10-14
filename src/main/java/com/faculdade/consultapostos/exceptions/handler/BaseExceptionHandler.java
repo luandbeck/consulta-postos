@@ -5,7 +5,9 @@ import com.faculdade.consultapostos.exceptions.domain.DefaultErrorResponse;
 import com.faculdade.consultapostos.exceptions.domain.StandardError;
 import com.faculdade.consultapostos.exceptions.enums.Errors;
 import feign.RetryableException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,13 +20,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
-import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+import static org.springframework.http.HttpStatus.*;
 
 
 public abstract class BaseExceptionHandler {
@@ -85,6 +85,24 @@ public abstract class BaseExceptionHandler {
         return ResponseEntity
                 .status(bbe.getStatus())
                 .body(bbe.getStandardError(request.getRequestURI(), request.getLocale()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> handlerConstraintViolationException(final ConstraintViolationException bbe,
+                                                                             final HttpServletRequest request) {
+        final StandardError error = StandardError.builder()
+                .status(INTERNAL_SERVER_ERROR.value())
+                .path(request.getRequestURI())
+                .timestamp(Timestamp.from(Instant.now()))
+                .error(DefaultErrorResponse.builder()
+                        .code(Errors.ATM003.name())
+                        .message(Errors.ATM003.getMessage(request.getLocale()))
+                        .build())
+                .build();
+
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR)
+                .body(error);
     }
 
     private void registerMapping(

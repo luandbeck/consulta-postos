@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class EnderecoNaoEncontradoException extends BaseBusinessException {
 
     public EnderecoNaoEncontradoException() {
-        super(HttpStatus.INTERNAL_SERVER_ERROR, Errors.ATM003, false);
+        super(HttpStatus.PRECONDITION_FAILED, Errors.ATM004, false);
     }
 
 }

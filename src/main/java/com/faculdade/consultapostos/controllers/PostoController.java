@@ -1,7 +1,6 @@
 package com.faculdade.consultapostos.controllers;
 
 import com.faculdade.consultapostos.dtos.CriaPostoDTO;
-import com.faculdade.consultapostos.dtos.RegistraAvaliacaoDTO;
 import com.faculdade.consultapostos.entities.Posto;
 import com.faculdade.consultapostos.repositories.PostoRepository;
 import com.faculdade.consultapostos.usecases.CriaPostoUseCase;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/postos")
+@RequestMapping("/api/v1/posto")
 public class PostoController {
 
     @Autowired
@@ -29,15 +28,6 @@ public class PostoController {
 
     @PostMapping
     public ResponseEntity<Void> criarPosto(@RequestBody final CriaPostoDTO dto) {
-
-        this.criaPostoUseCase.execute(dto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> registrarAvaliacao(@PathVariable final Long postoId,
-                                                   @RequestBody final RegistraAvaliacaoDTO dto) {
 
         this.criaPostoUseCase.execute(dto);
 
