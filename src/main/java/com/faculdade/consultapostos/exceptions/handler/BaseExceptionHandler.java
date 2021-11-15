@@ -5,7 +5,6 @@ import com.faculdade.consultapostos.exceptions.domain.DefaultErrorResponse;
 import com.faculdade.consultapostos.exceptions.domain.StandardError;
 import com.faculdade.consultapostos.exceptions.enums.Errors;
 import feign.RetryableException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -88,7 +87,7 @@ public abstract class BaseExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<StandardError> handlerConstraintViolationException(final ConstraintViolationException bbe,
+    public ResponseEntity<StandardError> handlerConstraintViolationException(final DataIntegrityViolationException bbe,
                                                                              final HttpServletRequest request) {
         final StandardError error = StandardError.builder()
                 .status(INTERNAL_SERVER_ERROR.value())

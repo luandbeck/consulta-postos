@@ -6,6 +6,7 @@ import com.faculdade.consultapostos.exceptions.enums.Errors;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,7 +80,8 @@ public class ControllerExceptionHandler extends BaseExceptionHandler {
                 jsonError.getPath().get(0).getFieldName(),
                 new String(resourceBundle.getString("generic.parseError").getBytes(StandardCharsets.ISO_8859_1),
                         StandardCharsets.UTF_8) + value));
-        final DefaultErrorResponse defaultErrorResponse = this.convertToDefaultErrorData(fieldList, request.getLocale());
+        final DefaultErrorResponse defaultErrorResponse = this.convertToDefaultErrorData(fieldList,
+                request.getLocale());
 
         final StandardError error = StandardError.builder()
                 .error(defaultErrorResponse)
@@ -108,29 +110,22 @@ public class ControllerExceptionHandler extends BaseExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<StandardError> constraintViolationException(final ConstraintViolationException ex,
-//                                                                      final HttpServletRequest request) {
-//        final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages/messages", request.getLocale());
-//        final Map<String, List<String>> fields = new HashMap<>();
-//        ex.getConstraintViolations().forEach(constraint -> {
-//            final var constraintImpl = (ConstraintViolationImpl) constraint;
-//            final String messageValidCharacters = constraintImpl.getMessage().replace("{", "").replace("}", "");
-//            final List<String> list =
-//                    Arrays.asList(new String(resourceBundle.getString(messageValidCharacters).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
-//            fields.put("header", list);
-//        });
-//
-//        final StandardError error = StandardError.builder()
-//                .error(this.convertToDefaultErrorData(fields, request.getLocale()))
-//                .printStack(Boolean.FALSE)
-//                .path(request.getRequestURI())
-//                .status(HttpStatus.BAD_REQUEST.value())
-//                .timestamp(new Timestamp(System.currentTimeMillis()))
-//                .build();
-//
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-//    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<StandardError> constraintViolationException(final ConstraintViolationException ex,
+                                                                      final HttpServletRequest request) {
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages/messages", request.getLocale());
+        final Map<String, List<String>> fields = new HashMap<>();
+
+        final StandardError error = StandardError.builder()
+                .error(this.convertToDefaultErrorData(fields, request.getLocale()))
+                .printStack(Boolean.FALSE)
+                .path(request.getRequestURI())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .timestamp(new Timestamp(System.currentTimeMillis()))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 
     private DefaultErrorResponse convertToDefaultErrorData(final List<FieldError> errorValidationList,
                                                            final Locale locale) {

@@ -1,4 +1,4 @@
-package com.faculdade.consultapostos.dtos;
+package com.faculdade.consultapostos.dtos.request;
 
 import lombok.Getter;
 import lombok.Setter;

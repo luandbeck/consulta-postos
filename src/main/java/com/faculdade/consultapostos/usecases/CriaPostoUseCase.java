@@ -1,6 +1,6 @@
 package com.faculdade.consultapostos.usecases;
 
-import com.faculdade.consultapostos.dtos.CriaPostoDTO;
+import com.faculdade.consultapostos.dtos.request.CriaPostoDTO;
 import com.faculdade.consultapostos.entities.Posto;
 import com.faculdade.consultapostos.providers.NominatimProvider;
 import com.faculdade.consultapostos.providers.dtos.NominatimResponse;
@@ -18,11 +18,13 @@ public class CriaPostoUseCase {
     private NominatimProvider nominatimProvider;
 
     public void execute(final CriaPostoDTO dto) {
-        final NominatimResponse coordenadas = nominatimProvider.getCoordenadas(dto.getEndereco(), dto.getNumeroEndereco());
+        final NominatimResponse coordenadas = nominatimProvider.getCoordenadas(dto.getEndereco(),
+                dto.getNumeroEndereco());
 
         final Posto posto = Posto.builder()
                 .nome(dto.getNome())
                 .endereco(dto.getEndereco())
+                .numeroEndereco(dto.getNumeroEndereco())
                 .bairro(dto.getBairro())
                 .cidade(dto.getCidade())
                 .estado(dto.getEstado())
@@ -31,6 +33,6 @@ public class CriaPostoUseCase {
                 .longitude(coordenadas.getLon())
                 .build();
 
-        this.repository.save(posto);
+        this.repository.insertPosto(posto);
     }
 }
