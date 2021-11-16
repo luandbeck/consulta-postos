@@ -33,7 +33,7 @@ public class BuscaPostoUseCase {
                         ConsultaPostoResponseDTO::merge)).values();
 
         final NominatimResponse coordenadasLocais = nominatimProvider.getCoordenadas(dto.getEndereco(),
-                dto.getNumeroEndereco());
+                dto.getNumeroEndereco(), dto.getCidade());
 
         mergeLines.stream().forEach(posto -> posto.calcularDistancia(coordenadasLocais.getLat(),
                 coordenadasLocais.getLon()));

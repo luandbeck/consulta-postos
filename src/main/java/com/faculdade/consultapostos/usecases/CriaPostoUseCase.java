@@ -19,7 +19,7 @@ public class CriaPostoUseCase {
 
     public void execute(final CriaPostoDTO dto) {
         final NominatimResponse coordenadas = nominatimProvider.getCoordenadas(dto.getEndereco(),
-                dto.getNumeroEndereco());
+                dto.getNumeroEndereco(), dto.getCidade());
 
         final Posto posto = Posto.builder()
                 .nome(dto.getNome())

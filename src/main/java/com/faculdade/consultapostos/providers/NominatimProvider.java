@@ -13,8 +13,8 @@ public class NominatimProvider {
     @Autowired
     private NominatimClient nominatimClient;
 
-    public NominatimResponse getCoordenadas(final String endereco, final Long numeroEndereco) {
-        final String enderecoCompleto = numeroEndereco.toString() + ", " + endereco;
+    public NominatimResponse getCoordenadas(final String endereco, final Long numeroEndereco, final String cidade) {
+        final String enderecoCompleto = numeroEndereco.toString() + ", " + endereco + ", " + cidade;
 
         final List<NominatimResponse> response = nominatimClient.getCoordenadas(enderecoCompleto, 0, "br", "json", 1);
 
